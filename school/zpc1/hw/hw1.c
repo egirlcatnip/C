@@ -47,8 +47,8 @@ bool words_match(char str_1[], int str1_start, int str1_end, char str_2[],
     j++;
   }
 
-  printf("Match found: ");
-  print_by_index(str_1, str1_start, str1_end);
+  // printf("Match found: ");
+  // print_by_index(str_1, str1_start, str1_end);
   return true;
 }
 
@@ -182,8 +182,6 @@ Source string:
 "ahoj svete"
 Pattern:
 "ahoj"
-
-Match found: "ahoj"
 
 Changed after 1 deletion:
 "svete"
