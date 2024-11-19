@@ -171,9 +171,11 @@ int main(void) {
   int equivalent = equivalence(matrix, m);
 
   if (equivalent) {
+    print_equivalence(matrix, m);
     printf("The matrix is equivalent.\n");
   } else {
     printf("The matrix not equivalent.\n");
+    print_equivalence(matrix, m);
   }
 
   printf("\n");
@@ -199,11 +201,10 @@ Matrix:
 1  1  1
 0  1  1
 
+The matrix is not equivalent.
 The matrix is reflexive.
 The matrix is symetric.
 The matrix is not transitive.
-
-The matrix is not equivalent.
 
 Transitive closure:
 Updated matrix:
