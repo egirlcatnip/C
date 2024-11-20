@@ -14,15 +14,15 @@ void print_array(int a[], int a_len) {
 
 void heapify(int a[], int a_len, int i) {
   int largest = i;
-  int l = 2 * i + 1;
-  int r = 2 * i + 2;
+  int left = 2 * i + 1;
+  int right = 2 * i + 2;
 
-  if (l < a_len && a[l] > a[largest]) {
-    largest = l;
+  if (left < a_len && a[left] > a[largest]) {
+    largest = left;
   }
 
-  if (r < a_len && a[r] > a[largest]) {
-    largest = r;
+  if (right < a_len && a[right] > a[largest]) {
+    largest = right;
   }
 
   if (largest != i) {
