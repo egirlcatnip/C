@@ -62,3 +62,14 @@ int main(void) {
   print_array(a, a_len);
   printf("\n");
 }
+
+// Konya
+
+// Expected output
+/*
+Unsorted array:
+[0, 5, 4, 3, 2, 1, 0, 6, 0]
+
+Sorted array:
+[0, 0, 0, 1, 2, 3, 4, 5, 6]
+*/
