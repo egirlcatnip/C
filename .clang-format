@@ -2,7 +2,7 @@
   "AlignAfterOpenBracket": "BlockIndent",
   "AllowShortFunctionsOnASingleLine": "Empty",
   "BreakBeforeBraces": "Custom",
-  "ColumnLimit": 120,
+  "ColumnLimit": 160,
   "BraceWrapping": {
     "AfterFunction": false,
     "AfterControlStatement": false,
