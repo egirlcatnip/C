@@ -1,7 +1,7 @@
 #include <stdbool.h> // true & false
-#include <stdio.h>   // printf, fprintf
-#include <stdlib.h>
-#include <time.h> // seed generation
+#include <stdio.h>   // printf
+#include <stdlib.h>  // rand, srand
+#include <time.h>    // seed generation
 
 ////////////////////////////////
 // Function Prototypes        //
