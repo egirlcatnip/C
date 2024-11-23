@@ -38,18 +38,19 @@ void _merge(int a[], int p, int q, int r) {
     if (left[i] <= right[j]) {
       a[k] = left[i];
       i = i + 1;
-    } else {
+    }
+    else {
       a[k] = right[j];
       j = j + 1;
     }
   }
 };
 
-void merge_sort(int a[], int p, int r) {
+void _merge_sort(int a[], int p, int r) {
   if (p < r) {
     int q = (p + r) / 2;
-    merge_sort(a, p, q);
-    merge_sort(a, q + 1, r);
+    _merge_sort(a, p, q);
+    _merge_sort(a, q + 1, r);
 
     _merge(a, p, q, r);
   }
@@ -63,7 +64,7 @@ int main(void) {
   print_array(a, a_len);
   printf("\n");
 
-  merge_sort(a, 0, a_len - 1);
+  _merge_sort(a, 0, a_len - 1);
 
   printf("Sorted array:\n");
   print_array(a, a_len);

@@ -11,6 +11,7 @@ void print_array(int a[], int a_len) {
   printf("]");
   printf("\n");
 }
+
 void selection_sort(int a[], int a_len) {
   for (int j = 0; j <= a_len - 2; j++) {
     int min = j;
