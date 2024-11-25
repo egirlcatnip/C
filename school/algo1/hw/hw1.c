@@ -254,12 +254,12 @@ void check_parameters(int len, int sort_order, int max, int min, int up_to, int 
     error = true;
   }
   if (mezni_velikost <= 0) {
-    printf("Error: Threshold size must be a positive integer.\n");
+    printf("Error: Threshold size must be >= 1.\n");
     error = true;
   }
 
   if (error) {
-    exit(1); // Exit the program if there's any error in the input
+    exit(1); // Exit the program if there are any errors
   }
 }
 
@@ -275,23 +275,27 @@ void compare_speeds(long int insertion_comp_count, long int merge_comp_count, lo
     merge_insertion_ratio = ((float)merge_comp_count / insertion_comp_count);
     hybrid_insertion_ratio = ((float)hybrid_comp_count / insertion_comp_count);
     printf("Insertion sort is the fastest.\n");
+    printf("\n");
     printf("Insertion sort is roughly %.3f times faster than merge sort.\n", merge_insertion_ratio);
-    printf("Insertion sort is roughly %.3f times faster than merge-insertion sort.\n", hybrid_insertion_ratio);
+    printf("Insertion sort is roughly %.3f times faster than hybrid sort.\n", hybrid_insertion_ratio);
   }
   else if (merge_comp_count < insertion_comp_count && merge_comp_count < hybrid_comp_count) {
     insertion_merge_ratio = ((float)insertion_comp_count / merge_comp_count);
     hybrid_merge_ratio = ((float)hybrid_comp_count / merge_comp_count);
     printf("Merge sort is the fastest.\n");
+    printf("\n");
     printf("Merge sort is roughly %.3f times faster than insertion sort.\n", insertion_merge_ratio);
-    printf("Merge sort is roughly %.3f times faster than merge-insertion sort.\n", hybrid_merge_ratio);
+    printf("Merge sort is roughly %.3f times faster than hybrid sort.\n", hybrid_merge_ratio);
   }
   else if (hybrid_comp_count < insertion_comp_count && hybrid_comp_count < merge_comp_count) {
     insertion_merge_ratio = ((float)insertion_comp_count / hybrid_comp_count);
     merge_hybrid_ratio = ((float)merge_comp_count / hybrid_comp_count);
+    merge_insertion_ratio = ((float)insertion_comp_count / merge_comp_count);
 
-    printf("Merge-insertion sort is the fastest.\n");
-    printf("Merge-insertion sort is roughly %.3f times faster than insertion sort.\n", insertion_merge_ratio);
-    printf("Merge-insertion sort is roughly %.3f times faster than merge sort.\n", merge_hybrid_ratio);
+    printf("Hybrid sort is the fastest.\n");
+    printf("\n");
+    printf("Hybrid sort is roughly %.3f times faster than insertion sort.\n", insertion_merge_ratio);
+    printf("Hybrid sort is roughly %.3f times faster than merge sort.\n", merge_hybrid_ratio);
   }
 }
 
@@ -301,16 +305,16 @@ void compare_speeds(long int insertion_comp_count, long int merge_comp_count, lo
 int main() {
   // Array parameters
   int len = 100000;   // array_length, 100_000 by default
-  int sort_order = 0; // 0 for ascending (>), 1 for descending (<)
+  int sort_order = 1; // 0 for ascending (>), 1 for descending (<)
 
   // Random number parameters
-  int max = 100; // maximum value of elements in arrays
-  int min = 0;   // minimum value of elements in arrays
+  int max = 10000000; // maximum value of elements in arrays
+  int min = 0;        // minimum value of elements in arrays
 
   // Print parameters
   int up_to = 10; // print up to this many elements
 
-  int mezni_velikost = 10; // threshold number for merge_insertion_sort
+  int mezni_velikost = 20; // threshold number for merge_insertion_sort
   // len < mezni_velikost -> insertion_sort
   // len >= mezni_velikost -> merge_sort
 
@@ -320,13 +324,14 @@ int main() {
   // Generate seed for random numbers based on current system time
   int seed = time(NULL);
   // seed = 10;
-  srand(seed);
+  // srand(seed);
 
   // Initialize all arrays to the same random values by copying the random array
   int array[len];
   randomize_array(array, len, min, max);
 
-  printf("Random array (seed: %i):\n", seed);
+  printf("Random array[%i] (seed: %i)\n", len, seed);
+  printf("Max: %i, Min: %i, Hybrid-sort treshold: %i \n", max, min, mezni_velikost);
   print_array_up_to(array, len, up_to);
   printf("\n");
 
@@ -352,7 +357,7 @@ int main() {
   printf("\n");
   printf("Insertion sort comparison count:    \t %li      \n", insertion_comp_count);
   printf("Merge sort comparison count:    \t %li      \n", merge_comp_count);
-  printf("Hybrid sort comparison count:    \t %li      \n", hybrid_comp_count);
+  printf("Merge-Insert sort comparison count:    \t %li      \n", hybrid_comp_count);
 
   // Compare the speed of the algorithms by %
   printf("\n");
@@ -360,30 +365,40 @@ int main() {
 
   // Choice of array doesn't matter, they are all sorted
   printf("\n");
-  printf("Sorted array:\n");
-  print_array_up_to(insertion_sort_array, len, up_to);
+  printf("Sorted array - ");
+
+  if (sort_order == 0) {
+    printf("Descending (>)\n");
+    print_array_up_to(insertion_sort_array, len, up_to);
+  }
+  else {
+    printf("Ascending (<)\n");
+    print_array_up_to(insertion_sort_array, len, up_to);
+  }
 
   return 0;
 }
 
 // Konya
-//
+
 // Expected output
 /*
-Random array (seed: 1732403298):
-[73, 45, 88, 64, 90, 43, 76, 71, 58, 37, ..., 67]
+Random array[100000] (seed: 1732406751)
+Max: 10000000, Min: 0, Hybrid-sort treshold: 20
+[4233113, 206316, 2298167, 4679684, 2591968, 7194581, 91574, 5942472, 8262590, 9698191, ..., 5210281]
 
 Comparing arrays:
 Arrays are equal
 
-Insertion sort comparison count:         2466678074
+Insertion sort comparison count:         2503084001
 Merge sort comparison count:             1668928
-Hybrid sort comparison count:            1586929
+Merge-Insert sort comparison count:      1655228
 
 Merge-insertion sort is the fastest.
-Merge-insertion sort is roughly 1554.372 times faster than insertion sort.
-Merge-insertion sort is roughly 1.052 times faster than merge sort.
 
-Sorted array:
-[100, 100, 100, 100, 100, 100, 100, 100, 100, 100, ..., 0]
+Merge-insertion sort is roughly 1512.229 times faster than insertion sort.
+Merge-insertion sort is roughly 1.008 times faster than merge sort.
+
+Sorted array - Descending (>)
+[10000000, 9999933, 9999504, 9999487, 9999454, 9999397, 9999396, 9999333, 9999250, 9998563, ..., 46]
 */

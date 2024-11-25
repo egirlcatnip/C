@@ -29,8 +29,7 @@ int word_end_index(char str[], int str_len, int start_index) {
   return i;
 }
 
-bool words_match(char str_1[], int str1_start, int str1_end, char str_2[],
-                 int str_2_start, int str_2_end) {
+bool words_match(char str_1[], int str1_start, int str1_end, char str_2[], int str_2_start, int str_2_end) {
   int str_len = str1_end - str1_start;
   int str_2_len = str_2_end - str_2_start;
 
@@ -84,11 +83,9 @@ int delete_words(char src[], char pattern[]) {
 
     while (pattern_start < pattern_len) {
       int pattern_word_start = pattern_start;
-      int pattern_word_end =
-          word_end_index(pattern, pattern_len, pattern_start);
+      int pattern_word_end = word_end_index(pattern, pattern_len, pattern_start);
 
-      bool match = words_match(src, src_word_start, src_word_end, pattern,
-                               pattern_word_start, pattern_word_end);
+      bool match = words_match(src, src_word_start, src_word_end, pattern, pattern_word_start, pattern_word_end);
 
       if (match) {
         truncate_from_to(src, src_word_start, src_word_end + 1);
