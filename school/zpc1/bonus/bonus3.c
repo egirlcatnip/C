@@ -94,17 +94,20 @@ void print_equivalence(int r[], int m) {
 
   if (is_reflexive) {
     printf("The matrix is reflexive.\n");
-  } else {
+  }
+  else {
     printf("The matrix is not reflexive.\n");
   }
   if (is_symetric) {
     printf("The matrix is symetric.\n");
-  } else {
+  }
+  else {
     printf("The matrix is not symetric.\n");
   }
   if (is_transitive) {
     printf("The matrix is transitive.\n");
-  } else {
+  }
+  else {
     printf("The matrix is not transitive.\n");
   }
 }
@@ -119,7 +122,8 @@ int equivalence(int r[], int m) {
 
   if (is_symetric && is_transitive && is_reflexive) {
     return true;
-  } else {
+  }
+  else {
     return false;
   }
   printf("\n");
@@ -143,7 +147,8 @@ void transitive_closure(int r[], int m) {
 
   if (!is_transitive) {
     printf("The matrix can't be turned transitive.\n");
-  } else {
+  }
+  else {
     printf("Updated matrix:\n");
     print_matrix(r, m);
 
@@ -151,7 +156,8 @@ void transitive_closure(int r[], int m) {
 
     if (is_equivalent) {
       printf("The matrix is equivalent.\n");
-    } else {
+    }
+    else {
       printf("The matrix is not equivalent.\n");
     }
   }
@@ -173,7 +179,8 @@ int main(void) {
   if (equivalent) {
     print_equivalence(matrix, m);
     printf("The matrix is equivalent.\n");
-  } else {
+  }
+  else {
     printf("The matrix not equivalent.\n");
     print_equivalence(matrix, m);
   }
@@ -185,7 +192,8 @@ int main(void) {
 
   if (is_transitive) {
     printf("The matrix is already transitive.\n");
-  } else {
+  }
+  else {
     transitive_closure(matrix, m);
   };
 

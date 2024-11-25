@@ -176,10 +176,10 @@ int main(void) {
 // Expected output
 /*
 Source string:
-"ahoj svete"
+"ahoj svete ahoj ahoj test"
 Pattern:
-"ahoj"
+"ahoj test"
 
-Changed after 1 deletion:
+Changed after 4 deletions:
 "svete"
 */
