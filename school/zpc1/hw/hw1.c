@@ -103,15 +103,8 @@ int delete_words(char src[], char pattern[]) {
       source_start = src_word_end + 1;
     }
   }
-
   src_len = str_len(src);
-  if (src[src_len - 1] == ' ') {
-    src[src_len - 1] = '\0';
-  }
-
-  else if (deletion_count > 0) {
-    printf("\n");
-  }
+  truncate_from_to(src, src_len - 1, src_len);
 
   return deletion_count;
 }
