@@ -24,7 +24,7 @@ const int mezni_velikost = 11; // 11 found to be somewhat ideal
 // mezni_velikost >  array_len -> insertion_sort
 // mezni_velikost <= array_len -> merge_sort
 
-// For testing on a given seed, overwritten by seed from current time by default
+// For testing on a given seed, overwritten by seed from current time if 0
 int seed = 0;
 
 ////////////////////////////////
@@ -337,8 +337,10 @@ int main() {
   check_parameters(len, sort_order, max, min, up_to, mezni_velikost);
 
   // Generate seed for random numbers based on current system time
-  seed = time(NULL);
-  srand(seed);
+  if (!seed) {
+    seed = time(NULL);
+    srand(seed);
+  }
 
   // Create an array[len] with random values in range <min, max>
 
