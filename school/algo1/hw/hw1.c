@@ -1,3 +1,11 @@
+////////////////////////////////
+// Homework for ALGO1         //
+////////////////////////////////
+
+// Comparing sorting algorithms by the counts of comparison operations.
+// Intended to run under linux with clang, on windows malloc() is necessary to allocate the arrays.
+// Made use of long long int, to avoid overflows with lengthy arrays.
+
 #include <stdbool.h> // true & false
 #include <stdio.h>   // printf
 #include <stdlib.h>  // rand, srand
@@ -6,11 +14,9 @@
 ////////////////////////////////
 // Function Prototypes        //
 ////////////////////////////////
-long int insertion_sort_with_counting(int pole[], int velikost, int poradi);
-
-long int merge_sort_with_counting(int pole[], int velikost, int poradi);
-
-long int merge_insertion_sort_with_counting(int pole[], int velikost, int poradi, int mezni_velikost);
+long long int insertion_sort_with_counting(int pole[], int velikost, int poradi);
+long long int merge_sort_with_counting(int pole[], int velikost, int poradi);
+long long int merge_insertion_sort_with_counting(int pole[], int velikost, int poradi, int mezni_velikost);
 
 ////////////////////////////////
 // Function Implementations   //
@@ -19,8 +25,8 @@ long int merge_insertion_sort_with_counting(int pole[], int velikost, int poradi
 ////////////////////////////////
 // Insertion sort O(n^2)      //
 ////////////////////////////////
-long int insertion_sort_with_counting(int pole[], int velikost, int poradi) {
-  long int comparison_count = 0;
+long long int insertion_sort_with_counting(int pole[], int velikost, int poradi) {
+  long long int comparison_count = 0;
   bool ascending = poradi > 0;
 
   if (ascending) {
@@ -59,8 +65,8 @@ long int insertion_sort_with_counting(int pole[], int velikost, int poradi) {
 }
 
 // Merge sort helper functions
-int _merge(int array[], int p, int q, int r, bool ascending) {
-  int comparison_count = 0;
+long long int _merge(int array[], int p, int q, int r, bool ascending) {
+  long long int comparison_count = 0;
 
   int n1 = q - p + 1;
   int n2 = r - q;
@@ -106,7 +112,7 @@ int _merge(int array[], int p, int q, int r, bool ascending) {
   return comparison_count;
 }
 
-long int _merge_sort(int array[], int p, int r, int comparison_count, bool ascending) {
+long long int _merge_sort(int array[], int p, int r, long long int comparison_count, bool ascending) {
   if (p < r) {
     int q = (p + r) / 2;
 
@@ -122,9 +128,9 @@ long int _merge_sort(int array[], int p, int r, int comparison_count, bool ascen
 ////////////////////////////////
 // Merge sort O(n*log(n))     //
 ////////////////////////////////
-long int merge_sort_with_counting(int pole[], int velikost, int poradi) {
+long long int merge_sort_with_counting(int pole[], int velikost, int poradi) {
   bool ascending = poradi > 0;
-  long int comparison_count = 0;
+  long long int comparison_count = 0;
 
   comparison_count = _merge_sort(pole, 0, velikost - 1, 0, ascending);
 
@@ -132,7 +138,7 @@ long int merge_sort_with_counting(int pole[], int velikost, int poradi) {
 }
 
 // Merge-insertion sort helper function
-long int _hybrid_sort(int array[], int p, int r, int comparison_count, int mezni_velikost, bool ascending) {
+long long int _hybrid_sort(int array[], int p, int r, long long int comparison_count, int mezni_velikost, bool ascending) {
   if (r - p + 1 <= mezni_velikost) {
     comparison_count += insertion_sort_with_counting(&array[p], r - p + 1, ascending ? 1 : 0);
   }
@@ -150,8 +156,8 @@ long int _hybrid_sort(int array[], int p, int r, int comparison_count, int mezni
 ////////////////////////////////
 // Merge-insertion sort       //
 ////////////////////////////////
-long int merge_insertion_sort_with_counting(int pole[], int velikost, int poradi, int mezni_velikost) {
-  long int comparison_count = 0;
+long long int merge_insertion_sort_with_counting(int pole[], int velikost, int poradi, int mezni_velikost) {
+  long long int comparison_count = 0;
   bool ascending = poradi > 0;
 
   comparison_count = _hybrid_sort(pole, 0, velikost - 1, 0, mezni_velikost, ascending);
@@ -185,15 +191,15 @@ void print_array_up_to(int a[], int len, int up_to) {
 }
 
 // Copy array
-void copy_array(int *source, int *destination, int size) {
-  for (int i = 0; i < size; i++) {
+void copy_array(int *source, int *destination, int len) {
+  for (int i = 0; i < len; i++) {
     destination[i] = source[i];
   }
 }
 
 // Randomize array element values
-void randomize_array(int pole[], int velikost, int min, int max) {
-  for (int i = 0; i < velikost; i++) {
+void randomize_array(int pole[], int min, int max, int len) {
+  for (int i = 0; i < len; i++) {
     pole[i] = rand() % (max - min + 1) + min;
   }
 }
@@ -264,7 +270,7 @@ void check_parameters(int len, int sort_order, int max, int min, int up_to, int 
 }
 
 // Compare speeds of algorithms by ratios, with clearer outputs
-void compare_speeds(long int insertion_comp_count, long int merge_comp_count, long int hybrid_comp_count, int len) {
+void compare_speeds(long long int insertion_comp_count, long long int merge_comp_count, long long int hybrid_comp_count, int len) {
   float merge_insertion_ratio = 0;
   float hybrid_insertion_ratio = 0;
   float merge_hybrid_ratio = 0;
@@ -300,81 +306,107 @@ void compare_speeds(long int insertion_comp_count, long int merge_comp_count, lo
 }
 
 ////////////////////////////////
+// Array parameters           //
+////////////////////////////////
+const int len = 100000;   // array_length, 100_000 by default
+const int sort_order = 1; // 0 for ascending (>), 1 for descending (<)
+
+// Random number parameters
+const int max = 999999; // maximum value of elements in arrays
+const int min = 0;      // minimum value of elements in arrays
+
+// Print parameters
+const int up_to = 10; // print up to this many elements
+
+const int mezni_velikost = 11; // threshold number for merge_insertion_sort
+// 11 found to be somewhat ideal
+// len < mezni_velikost -> insertion_sort
+// len >= mezni_velikost -> merge_sort
+
+////////////////////////////////
 // Main function              //
 ////////////////////////////////
 int main() {
-  // Array parameters
-  int len = 100000;   // array_length, 100_000 by default
-  int sort_order = 1; // 0 for ascending (>), 1 for descending (<)
-
-  // Random number parameters
-  int max = 10000000; // maximum value of elements in arrays
-  int min = 0;        // minimum value of elements in arrays
-
-  // Print parameters
-  int up_to = 10; // print up to this many elements
-
-  int mezni_velikost = 20; // threshold number for merge_insertion_sort
-  // len < mezni_velikost -> insertion_sort
-  // len >= mezni_velikost -> merge_sort
-
   // Check the validity of the parameters
   check_parameters(len, sort_order, max, min, up_to, mezni_velikost);
 
   // Generate seed for random numbers based on current system time
   int seed = time(NULL);
+
+  // For testing on a given seed
   // seed = 10;
-  // srand(seed);
+  srand(seed);
 
-  // Initialize all arrays to the same random values by copying the random array
-  int array[len];
-  randomize_array(array, len, min, max);
+  // Create an array[len] with random values in range <min, max>
 
-  printf("Random array[%i] (seed: %i)\n", len, seed);
-  printf("Max: %i, Min: %i, Hybrid-sort treshold: %i \n", max, min, mezni_velikost);
+  // If running on linux, malloc isn't necessary
+  // int array[len];
+  int *array = (int *)malloc(len * sizeof(int));
+
+  randomize_array(array, min, max, len);
+
+  printf("array[%i] (seed: %i)\n", len, seed);
+  printf("max: %i, min: %i, treshold: %i \n", max, min, mezni_velikost);
   print_array_up_to(array, len, up_to);
   printf("\n");
 
-  int insertion_sort_array[len];
+  // Make copies of the random array for comparisons
+
+  // If running on linux, malloc isn't necessary
+  // int insertion_sort_array[len]
+  // int merge_sort_array[len]
+  // int hybrid_sort_array[len]
+
+  int *insertion_sort_array = (int *)malloc(len * sizeof(int));
+  int *merge_sort_array = (int *)malloc(len * sizeof(int));
+  int *hybrid_sort_array = (int *)malloc(len * sizeof(int));
+
+  // Exit program if memory allocation fails
+  if (!array || !insertion_sort_array || !merge_sort_array || !hybrid_sort_array) {
+    printf("Memory allocation failed!\n");
+    return 1;
+  }
+
   copy_array(array, insertion_sort_array, len);
-
-  int merge_sort_array[len];
   copy_array(array, merge_sort_array, len);
-
-  int hybrid_sort_array[len];
   copy_array(array, hybrid_sort_array, len);
 
-  // Sort the arrays
-  long int insertion_comp_count = insertion_sort_with_counting(insertion_sort_array, len, sort_order);
-  long int merge_comp_count = merge_sort_with_counting(merge_sort_array, len, sort_order);
-  long int hybrid_comp_count = merge_insertion_sort_with_counting(hybrid_sort_array, len, sort_order, mezni_velikost);
+  // Sort the arrays and return counts of comparisons
+  long long int insertion_comp_count = insertion_sort_with_counting(insertion_sort_array, len, sort_order);
+  long long int merge_comp_count = merge_sort_with_counting(merge_sort_array, len, sort_order);
+  long long int hybrid_comp_count = merge_insertion_sort_with_counting(hybrid_sort_array, len, sort_order, mezni_velikost);
 
-  // Compare the arrays
+  // Compare the arrays to ensure they're all sorted the same
   printf("Comparing arrays:\n");
   compare_arrays(insertion_sort_array, merge_sort_array, hybrid_sort_array, len, up_to);
 
-  // Print comparison operator counts
+  // Compare the sorting algorithms' comparison operation counts
   printf("\n");
-  printf("Insertion sort comparison count:    \t %li      \n", insertion_comp_count);
-  printf("Merge sort comparison count:    \t %li      \n", merge_comp_count);
-  printf("Merge-Insert sort comparison count:    \t %li      \n", hybrid_comp_count);
+  printf("Insertion sort comparison count:    \t %lli      \n", insertion_comp_count);
+  printf("Merge sort comparison count:    \t %lli      \n", merge_comp_count);
+  printf("Merge-Insert sort comparison count:    \t %lli      \n", hybrid_comp_count);
+  printf("\n");
 
-  // Compare the speed of the algorithms by %
-  printf("\n");
   compare_speeds(insertion_comp_count, merge_comp_count, hybrid_comp_count, len);
 
-  // Choice of array doesn't matter, they are all sorted
   printf("\n");
   printf("Sorted array - ");
 
-  if (sort_order == 0) {
-    printf("Descending (>)\n");
-    print_array_up_to(insertion_sort_array, len, up_to);
-  }
-  else {
+  if (sort_order == 1) {
     printf("Ascending (<)\n");
     print_array_up_to(insertion_sort_array, len, up_to);
   }
+  else if (sort_order == 0) {
+    printf("Descending (>)\n");
+    print_array_up_to(insertion_sort_array, len, up_to);
+  }
+
+  // Free the malloc memory
+  // If running on linux, malloc isn't necessary
+  free(array);
+  free(insertion_sort_array);
+  free(merge_sort_array);
+  free(hybrid_sort_array);
 
   return 0;
 }
@@ -383,22 +415,22 @@ int main() {
 
 // Expected output
 /*
-Random array[100000] (seed: 1732406751)
-Max: 10000000, Min: 0, Hybrid-sort treshold: 20
-[4233113, 206316, 2298167, 4679684, 2591968, 7194581, 91574, 5942472, 8262590, 9698191, ..., 5210281]
+array[100000] (seed: 1733357027)
+max: 999999, min: 0, treshold: 11
+[4877, 10008, 24232, 28820, 5610, 17863, 767, 8092, 23787, 31675, ..., 24971]
 
 Comparing arrays:
 Arrays are equal
 
-Insertion sort comparison count:         2503084001
+Insertion sort comparison count:         2504818564
 Merge sort comparison count:             1668928
-Merge-Insert sort comparison count:      1655228
+Merge-Insert sort comparison count:      1587753
 
-Merge-insertion sort is the fastest.
+Hybrid sort is the fastest.
 
-Merge-insertion sort is roughly 1512.229 times faster than insertion sort.
-Merge-insertion sort is roughly 1.008 times faster than merge sort.
+Hybrid sort is roughly 1577.587 times faster than insertion sort.
+Hybrid sort is roughly 1.051 times faster than merge sort.
 
-Sorted array - Descending (>)
-[10000000, 9999933, 9999504, 9999487, 9999454, 9999397, 9999396, 9999333, 9999250, 9998563, ..., 46]
+Sorted array - Ascending (<)
+[0, 1, 1, 1, 2, 2, 2, 2, 2, 3, ..., 32767]
 */
