@@ -6,6 +6,30 @@
 // On windows malloc() is necessary to allocate the arrays due to stack size limit overflow.
 // Made use of long long int, to avoid overflows with lengthy arrays.
 
+////////////////////////////////
+// Array parameters           //
+////////////////////////////////
+const int len = 100000;   // array_length, 100_000 by default
+const int sort_order = 0; // 0 for descending (>), 1 for ascending (<)
+
+// Random number parameters
+const int max = 9999; // maximum value of elements in arrays
+const int min = 0;    // minimum value of elements in arrays
+
+// Print parameters
+const int up_to = 10; // print up to this many elements of the araray
+
+// Threshold number for merge_insertion_sort
+const int mezni_velikost = 11; // 11 found to be somewhat ideal
+// mezni_velikost >  array_len -> insertion_sort
+// mezni_velikost <= array_len -> merge_sort
+
+// For testing on a given seed, overwritten by seed from current time by default
+int seed = 0;
+
+////////////////////////////////
+// Includes                   //
+////////////////////////////////
 #include <stdbool.h> // true & false
 #include <stdio.h>   // printf
 #include <stdlib.h>  // rand, srand
@@ -304,27 +328,6 @@ void compare_speeds(long long int insertion_comp_count, long long int merge_comp
     printf("Hybrid sort is roughly %.3f times faster than merge sort.\n", merge_hybrid_ratio);
   }
 }
-
-////////////////////////////////
-// Array parameters           //
-////////////////////////////////
-const int len = 100000;   // array_length, 100_000 by default
-const int sort_order = 0; // 0 for descending (>), 1 for ascending (<)
-
-// Random number parameters
-const int max = 9999; // maximum value of elements in arrays
-const int min = 0;    // minimum value of elements in arrays
-
-// Print parameters
-const int up_to = 10; // print up to this many elements of the araray
-
-// Threshold number for merge_insertion_sort
-const int mezni_velikost = 11; // 11 found to be somewhat ideal
-// mezni_velikost >  array_len -> insertion_sort
-// mezni_velikost <= array_len -> merge_sort
-
-// For testing on a given seed, overwritten by seed from current time by default
-int seed = 0;
 
 ////////////////////////////////
 // Main function              //
