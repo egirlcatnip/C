@@ -3,7 +3,7 @@
 ////////////////////////////////
 
 // Comparing sorting algorithms by the counts of comparison operations.
-// Intended to run under linux with clang, on windows malloc() is necessary to allocate the arrays.
+// On windows malloc() is necessary to allocate the arrays due to stack size limit overflow.
 // Made use of long long int, to avoid overflows with lengthy arrays.
 
 #include <stdbool.h> // true & false
@@ -309,19 +309,22 @@ void compare_speeds(long long int insertion_comp_count, long long int merge_comp
 // Array parameters           //
 ////////////////////////////////
 const int len = 100000;   // array_length, 100_000 by default
-const int sort_order = 1; // 0 for ascending (>), 1 for descending (<)
+const int sort_order = 0; // 0 for descending (>), 1 for ascending (<)
 
 // Random number parameters
-const int max = 999999; // maximum value of elements in arrays
-const int min = 0;      // minimum value of elements in arrays
+const int max = 9999; // maximum value of elements in arrays
+const int min = 0;    // minimum value of elements in arrays
 
 // Print parameters
-const int up_to = 10; // print up to this many elements
+const int up_to = 10; // print up to this many elements of the araray
 
-const int mezni_velikost = 11; // threshold number for merge_insertion_sort
-// 11 found to be somewhat ideal
-// len < mezni_velikost -> insertion_sort
-// len >= mezni_velikost -> merge_sort
+// Threshold number for merge_insertion_sort
+const int mezni_velikost = 11; // 11 found to be somewhat ideal
+// mezni_velikost >  array_len -> insertion_sort
+// mezni_velikost <= array_len -> merge_sort
+
+// For testing on a given seed, overwritten by seed from current time by default
+int seed = 0;
 
 ////////////////////////////////
 // Main function              //
@@ -331,42 +334,39 @@ int main() {
   check_parameters(len, sort_order, max, min, up_to, mezni_velikost);
 
   // Generate seed for random numbers based on current system time
-  int seed = time(NULL);
-
-  // For testing on a given seed
-  // seed = 10;
+  seed = time(NULL);
   srand(seed);
 
   // Create an array[len] with random values in range <min, max>
 
+  int *array = malloc(len * sizeof(int));
   // If running on linux, malloc isn't necessary
   // int array[len];
-  int *array = (int *)malloc(len * sizeof(int));
 
   randomize_array(array, min, max, len);
 
   printf("array[%i] (seed: %i)\n", len, seed);
-  printf("max: %i, min: %i, treshold: %i \n", max, min, mezni_velikost);
+  printf("min: %i, max: %i, treshold: %i \n", min, max, mezni_velikost);
   print_array_up_to(array, len, up_to);
   printf("\n");
 
-  // Make copies of the random array for comparisons
+  // Create arrays for each sorting algorithm
+  int *insertion_sort_array = malloc(len * sizeof(int));
+  int *merge_sort_array = malloc(len * sizeof(int));
+  int *hybrid_sort_array = malloc(len * sizeof(int));
 
   // If running on linux, malloc isn't necessary
-  // int insertion_sort_array[len]
-  // int merge_sort_array[len]
-  // int hybrid_sort_array[len]
-
-  int *insertion_sort_array = (int *)malloc(len * sizeof(int));
-  int *merge_sort_array = (int *)malloc(len * sizeof(int));
-  int *hybrid_sort_array = (int *)malloc(len * sizeof(int));
+  // int insertion_sort_array[len];
+  // int merge_sort_array[len];
+  // int hybrid_sort_array[len];
 
   // Exit program if memory allocation fails
   if (!array || !insertion_sort_array || !merge_sort_array || !hybrid_sort_array) {
     printf("Memory allocation failed!\n");
-    return 1;
+    exit(1);
   }
 
+  // Make copies of the random array for comparisons
   copy_array(array, insertion_sort_array, len);
   copy_array(array, merge_sort_array, len);
   copy_array(array, hybrid_sort_array, len);
@@ -382,9 +382,9 @@ int main() {
 
   // Compare the sorting algorithms' comparison operation counts
   printf("\n");
-  printf("Insertion sort comparison count:    \t %lli      \n", insertion_comp_count);
-  printf("Merge sort comparison count:    \t %lli      \n", merge_comp_count);
-  printf("Merge-Insert sort comparison count:    \t %lli      \n", hybrid_comp_count);
+  printf("Insertion sort comparison count: %lli \n", insertion_comp_count);
+  printf("Merge     sort comparison count: %lli \n", merge_comp_count);
+  printf("Hybrid    sort comparison count: %lli \n", hybrid_comp_count);
   printf("\n");
 
   compare_speeds(insertion_comp_count, merge_comp_count, hybrid_comp_count, len);
@@ -403,10 +403,10 @@ int main() {
 
   // Free the malloc memory
   // If running on linux, malloc isn't necessary
-  free(array);
-  free(insertion_sort_array);
-  free(merge_sort_array);
-  free(hybrid_sort_array);
+  // free(array);
+  // free(insertion_sort_array);
+  // free(merge_sort_array);
+  // free(hybrid_sort_array);
 
   return 0;
 }
