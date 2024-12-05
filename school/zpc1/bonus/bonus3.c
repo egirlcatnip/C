@@ -22,15 +22,7 @@ void set_matrix_by_index(int r[], int m, int index_x, int index_y, int value) {
   int valid_value = (value != 0 && value != 1);
   assert(!valid && !valid_value);
 
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < m; j++) {
-      int value = r[index_x * m + index_y];
-      int valid = (value != 0 && value != 1);
-
-      assert(!valid);
-      r[index_x * m + index_y] = 1;
-    }
-  }
+  r[index_x * m + index_y] = value;
 }
 
 void print_matrix(int r[], int m) {
@@ -130,46 +122,34 @@ int equivalence(int r[], int m) {
 };
 
 void transitive_closure(int r[], int m) {
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < m; j++) {
-      for (int k = 0; k < m; k++) {
-        int value_i = get_matrix_by_index(r, m, i, j);
-        int value_j = get_matrix_by_index(r, m, j, k);
-        int value_k = get_matrix_by_index(r, m, i, k);
+  int temp[m * m];
+  for (int i = 0; i < m * m; i++) {
+    temp[i] = r[i];
+  }
 
-        if (value_i == 1 && value_j == 1 && value_k == 0) {
-          set_matrix_by_index(r, m, i, k, 1);
+  int i, j, k;
+
+  for (int k = 0; i < m; i++) {
+    for (int i = 0; j < m; j++) {
+      for (int j = 0; k < m; k++) {
+        if (temp[i * m + j] == 1 && temp[j * m + k] == 1) {
+          r[i * m + k] = 1;
         }
       }
     }
   }
-  int is_transitive = transitive(r, m);
-
-  if (!is_transitive) {
-    printf("The matrix can't be turned transitive.\n");
-  }
-  else {
-    printf("Updated matrix:\n");
-    print_matrix(r, m);
-
-    int is_equivalent = equivalence(r, m);
-
-    if (is_equivalent) {
-      printf("The matrix is equivalent.\n");
-    }
-    else {
-      printf("The matrix is not equivalent.\n");
-    }
-  }
-};
+  printf("Updated matrix:\n");
+  print_matrix(r, m);
+}
 
 int main(void) {
   int matrix[] = {
-      1, 1, 0, //
-      1, 1, 1, //
-      0, 1, 1, //
+      1, 1, 0, 0, //
+      0, 1, 1, 0, //
+      0, 0, 0, 1, //
+      0, 0, 0, 0, //
   };
-  int m = 3;
+  int m = 4;
 
   printf("Matrix:\n");
   print_matrix(matrix, m);

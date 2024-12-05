@@ -18,7 +18,9 @@ int gcd(int a, int b) {
 }
 
 // Utility function: lcm
-int lcm(int a, int b) { return (a * b) / gcd(a, b); }
+int lcm(int a, int b) {
+  return (a * b) / gcd(a, b);
+}
 
 // Simplify the fraction
 fraction simplify(fraction f) {
@@ -45,7 +47,9 @@ fraction fraction_new(int numerator, int denominator) {
 }
 
 // Display function
-void fraction_print(fraction f) { printf("%d/%d", f.numerator, f.denominator); }
+void fraction_print(fraction f) {
+  printf("%d/%d", f.numerator, f.denominator);
+}
 
 // Compare fractions (returns -1 if f1 < f2, 0 if equal, 1 if f1 > f2)
 int fraction_compare(fraction f1, fraction f2) {
@@ -69,16 +73,14 @@ int fraction_equals(fraction f1, fraction f2) {
 // Add fractions
 fraction fraction_add(fraction f1, fraction f2) {
   int common_denominator = lcm(f1.denominator, f2.denominator);
-  int numerator = (f1.numerator * (common_denominator / f1.denominator)) +
-                  (f2.numerator * (common_denominator / f2.denominator));
+  int numerator = (f1.numerator * (common_denominator / f1.denominator)) + (f2.numerator * (common_denominator / f2.denominator));
   return fraction_new(numerator, common_denominator);
 }
 
 // Subtract fractions
 fraction fraction_sub(fraction f1, fraction f2) {
   int common_denominator = lcm(f1.denominator, f2.denominator);
-  int numerator = (f1.numerator * (common_denominator / f1.denominator)) -
-                  (f2.numerator * (common_denominator / f2.denominator));
+  int numerator = (f1.numerator * (common_denominator / f1.denominator)) - (f2.numerator * (common_denominator / f2.denominator));
   return fraction_new(numerator, common_denominator);
 }
 
@@ -152,8 +154,7 @@ void test_fraction_simplification() {
 void test_zero_denominator() {
   // This will cause an exit with an error
   // fraction_new(1, 0);
-  printf(
-      "Zero denominator test passed (commented out to avoid runtime error).\n");
+  printf("Zero denominator test passed (commented out to avoid runtime error).\n");
 }
 
 int main() {
