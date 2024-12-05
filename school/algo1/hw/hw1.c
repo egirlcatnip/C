@@ -408,10 +408,10 @@ int main() {
 
   // Free the malloc memory
   // If running on linux, malloc isn't necessary
-  // free(array);
-  // free(insertion_sort_array);
-  // free(merge_sort_array);
-  // free(hybrid_sort_array);
+  free(array);
+  free(insertion_sort_array);
+  free(merge_sort_array);
+  free(hybrid_sort_array);
 
   return 0;
 }
