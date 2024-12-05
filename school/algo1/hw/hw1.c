@@ -415,22 +415,22 @@ int main() {
 
 // Expected output
 /*
-array[100000] (seed: 1733357027)
-max: 999999, min: 0, treshold: 11
-[4877, 10008, 24232, 28820, 5610, 17863, 767, 8092, 23787, 31675, ..., 24971]
+array[100000] (seed: 1733364746)
+min: 0, max: 9999, treshold: 11
+[84, 8381, 27, 1747, 338, 7891, 6832, 2377, 9232, 2804, ..., 7333]
 
 Comparing arrays:
 Arrays are equal
 
-Insertion sort comparison count:         2504818564
-Merge sort comparison count:             1668928
-Merge-Insert sort comparison count:      1587753
+Insertion sort comparison count: 2499147438
+Merge     sort comparison count: 1668928
+Hybrid    sort comparison count: 1587892
 
 Hybrid sort is the fastest.
 
-Hybrid sort is roughly 1577.587 times faster than insertion sort.
+Hybrid sort is roughly 1573.878 times faster than insertion sort.
 Hybrid sort is roughly 1.051 times faster than merge sort.
 
-Sorted array - Ascending (<)
-[0, 1, 1, 1, 2, 2, 2, 2, 2, 3, ..., 32767]
+Sorted array - Descending (>)
+[9999, 9999, 9999, 9999, 9999, 9999, 9999, 9998, 9998, 9998, ..., 0]
 */
