@@ -406,8 +406,8 @@ int main() {
     print_array_up_to(insertion_sort_array, len, up_to);
   }
 
-  // Free the malloc memory
-  // If running on linux, malloc isn't necessary
+  // Free the memory
+  // If running on linux, free() isn't necessary
   free(array);
   free(insertion_sort_array);
   free(merge_sort_array);
