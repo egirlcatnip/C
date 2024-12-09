@@ -1,104 +1,117 @@
-#include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 
-// Helper functions
-int str_len(char str[]) {
-  int i = 0;
-  while (str[i] != '\0') {
+void split_two_numbers(char src[], int split, char num1[], char num2[]) {
+  int i = 0, j = 0;
+  while (src[i] != ' ' && src[i] != '\0') {
+    num1[i] = src[i];
     i++;
   }
-  return i;
-}
-
-void split_to_two(char src[], char a[], char b[], int n) {
-  int i = 0;
-  while (i < n) {
-    a[i] = src[i];
-    i++;
-  }
-  a[i] = '\0';
-
-  int j = 0;
+  num1[i] = '\0';
+  i++;
   while (src[i] != '\0') {
-    b[j] = src[i];
+    num2[j] = src[i];
     i++;
     j++;
   }
-  b[j] = '\0';
+  num2[j] = '\0';
 }
 
-void str_to_digits(char str[], int digits[], int n) {
-  //
+int get_length(char num[]) {
+  int len = 0;
+  while (num[len] != '\0')
+    len++;
+  return len;
 }
 
-void digits_to_str(int digits[], char str[], int n) {
-  //
+int char_to_digit(char c) {
+  return c - '0';
 }
 
-int digits_to_int(int digits[], int n) {
-  //
+char digit_to_char(int i) {
+  return i + '0';
 }
 
-int add(char a[], char b[], char result[], int n) {
-  int a_int[n];
-  int b_int[n];
+int add_numbers(char num1[], char num2[], char sum[], int max_len) {
+  int len1 = get_length(num1);
+  int len2 = get_length(num2);
 
-  str_to_digits(a, a_int, n);
-  str_to_digits(b, b_int, n);
+  int carry = 0;
+  int sum_len = 0;
 
-  int added[n];
-  // do addition
+  for (int p1 = len1 - 1, p2 = len2 - 1; p1 >= 0 || p2 >= 0 || carry; p1--, p2--) {
+    int digit1 = 0;
+    if (p1 >= 0) {
+      digit1 = char_to_digit(num1[p1]);
+    }
 
-  char added_str[n];
-  digits_to_str(added, added_str, n);
+    int digit2 = 0;
+    if (p2 >= 0) {
+      digit2 = char_to_digit(num2[p2]);
+    }
 
-  int added_len = str_len(added_str);
+    int digit_sum = digit1 + digit2 + carry;
+    if (sum_len >= max_len) {
+      return 0;
+    }
 
-  int int_max = 2147483647;
-  if (added_len < int_max) {
-    int number = digits_to_int(added, n);
-    return number;
+    int digit = digit_sum % 10;
+    carry = digit_sum / 10;
+
+    sum[sum_len] = digit_to_char(digit);
+    sum_len++;
   }
 
-  return 0;
-};
+  sum[sum_len] = '\0';
+  return sum_len;
+}
 
-// Implementation
 int compute_sum(char src[], char result[], int n) {
-  char a[n];
-  char b[n];
+  int array_len = n;
+  char num1[array_len];
+  char num2[array_len];
+  char sum[array_len];
 
-  split_to_two(src, a, b, n);
+  split_two_numbers(src, array_len, num1, num2);
 
-  return add(a, b, result, 3);
-};
+  int sum_len = add_numbers(num1, num2, sum, n - 1);
 
-int main(void) {
-  char src[] = "123 456";
-  char src_len = str_len(src);
+  if (sum_len == 0 || sum_len >= n) {
+    return 0;
+  }
 
-  char result[100000];
+  for (int i = 0; i < sum_len; i++) {
+    result[i] = sum[sum_len - i - 1];
+  }
 
-  int num = compute_sum(src, result, src_len);
+  result[sum_len] = '\0';
+  return 1;
+}
 
-  if (num == 0) {
-    // Print number from array
-    for (int i = 0; i < src_len; i++) {
-      printf("%d", result[i]);
-    }
+int main() {
+  char src[] = "1234 8766";
+  // char src[] = "12340000000000000000000000000 87660000000000000000000000000"; // example of long input
+  int result_len = 600; // Does not overflow
+  // int result_len = 5; // Overflows
+
+  char result[result_len];
+
+  int v = compute_sum(src, result, result_len);
+
+  printf("Input : %s\n", src);
+  if (v) {
+    printf("Sum   : %s\n", result);
+    return 0;
   }
   else {
-    // Print number from int
-    printf("%d", num);
+    printf("Sum: N/A, overflow\n");
+    return 1;
   }
-
-  return 0;
 }
 
 // Konya
 
-// Expected output
+// Expected Output
 /*
-
+Input : 1234 8766
+Sum   : 10000
 */
